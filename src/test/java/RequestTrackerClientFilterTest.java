@@ -2,6 +2,7 @@ import com.sun.jersey.api.client.ClientHandler;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.filter.ClientFilter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -31,6 +32,11 @@ public class RequestTrackerClientFilterTest {
     public void setUp() {
         requestTrackerClientFilter = new RequestTrackerClientFilter();
         when(clientRequest.getHeaders()).thenReturn(headersMap);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        MDC.clear();
     }
 
     @Test
