@@ -26,9 +26,9 @@ public class RequestTrackerClientFilter extends ClientFilter {
     }
 
     protected ClientRequest doWork(ClientRequest clientRequest) {
-        Optional<String> requestId = Optional.fromNullable(MDC.get("Request-Tracker"));
+        Optional<String> requestId = Optional.fromNullable(MDC.get(RequestTrackerConstants.MDC_KEY));
 
-        clientRequest.getHeaders().add("X-Request-Tracker", requestId.or(ID_SUPPLIER));
+        clientRequest.getHeaders().add(RequestTrackerConstants.LOG_ID_HEADER, requestId.or(ID_SUPPLIER));
 
         return clientRequest;
     }

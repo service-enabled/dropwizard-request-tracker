@@ -45,25 +45,25 @@ public class RequestTrackerServletFilterTest {
 	public void checksForHeader() throws Exception {
 		requestTrackerServletFilter.doFilter(request, response, chain);
 
-		verify(request).getHeader("X-Request-Tracker");
+		verify(request).getHeader(RequestTrackerConstants.LOG_ID_HEADER);
 	}
 
 	@Test
 	public void setsIdWhenHeaderMissing() throws Exception {
 		requestTrackerServletFilter.doFilter(request, response, chain);
 
-		UUID.fromString(MDC.get("Request-Tracker"));
+		UUID.fromString(MDC.get(RequestTrackerConstants.MDC_KEY));
 		// Didn't throw an IllegalArgumentException so it worked!
 	}
 
 	@Test
 	public void reusesIdWhenHeaderPresent() throws Exception {
 		String headerId = UUID.randomUUID().toString();
-		when(request.getHeader("X-Request-Tracker")).thenReturn(headerId);
+		when(request.getHeader(RequestTrackerConstants.LOG_ID_HEADER)).thenReturn(headerId);
 
 		requestTrackerServletFilter.doFilter(request, response, chain);
 
-		String idInLog = MDC.get("Request-Tracker");
+		String idInLog = MDC.get(RequestTrackerConstants.MDC_KEY);
 		assertThat(idInLog, equalTo(headerId));
 	}
 }
