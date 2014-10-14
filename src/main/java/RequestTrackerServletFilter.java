@@ -29,8 +29,8 @@ public class RequestTrackerServletFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-		Optional<String> requestId = Optional.fromNullable(httpServletRequest.getHeader("X-Request-Tracker"));
-		MDC.put("Request-Tracker", requestId.or(ID_SUPPLIER));
+		Optional<String> requestId = Optional.fromNullable(httpServletRequest.getHeader(RequestTrackerConstants.LOG_ID_HEADER));
+		MDC.put(RequestTrackerConstants.MDC_KEY, requestId.or(ID_SUPPLIER));
 		chain.doFilter(request, response);
 	}
 

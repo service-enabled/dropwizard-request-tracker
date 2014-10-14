@@ -47,14 +47,14 @@ public class RequestTrackerClientFilterTest {
     @Test
     public void setsTheRequestTrackerHeader() {
         requestTrackerClientFilter.doWork(clientRequest);
-        verify(headersMap).add(eq("X-Request-Tracker"), Mockito.any(UUID.class));
+        verify(headersMap).add(eq(RequestTrackerConstants.LOG_ID_HEADER), Mockito.any(UUID.class));
     }
 
     @Test
     public void usesExistingMDCValueWhenPresent() {
         String logId = UUID.randomUUID().toString();
-        MDC.put("Request-Tracker",logId);
+        MDC.put(RequestTrackerConstants.MDC_KEY,logId);
         requestTrackerClientFilter.doWork(clientRequest);
-        verify(headersMap).add(eq("X-Request-Tracker"), eq(logId));
+        verify(headersMap).add(eq(RequestTrackerConstants.LOG_ID_HEADER), eq(logId));
     }
 }
