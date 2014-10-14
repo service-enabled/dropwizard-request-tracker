@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.Spy;
+import org.slf4j.MDC;
 
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -43,4 +44,11 @@ public class RequestTrackerClientFilterTest {
         verify(headersMap).add(eq("X-Request-Tracker"), Mockito.any(UUID.class));
     }
 
+    @Test
+    public void usesExistingMDCValueWhenPresent() {
+        String logId = UUID.randomUUID().toString();
+        MDC.put("Request-Tracker",logId);
+        requestTrackerClientFilter.doWork(clientRequest);
+        verify(headersMap).add(eq("X-Request-Tracker"), eq(logId));
+    }
 }

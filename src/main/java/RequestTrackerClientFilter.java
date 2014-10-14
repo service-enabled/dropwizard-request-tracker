@@ -2,6 +2,7 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.filter.ClientFilter;
+import org.slf4j.MDC;
 
 import java.util.UUID;
 
@@ -17,7 +18,14 @@ public class RequestTrackerClientFilter extends ClientFilter {
     }
 
     protected ClientRequest doWork(ClientRequest clientRequest) {
-        clientRequest.getHeaders().add("X-Request-Tracker", UUID.randomUUID());
+        String logId= MDC.get("Request-Tracker");
+
+        if(logId == null) {
+            logId = UUID.randomUUID().toString();
+        }
+
+        clientRequest.getHeaders().add("X-Request-Tracker", logId);
+
         return clientRequest;
     }
 }
