@@ -14,12 +14,7 @@ import java.util.UUID;
 
 public class RequestTrackerServletFilter implements Filter {
 	// Use a supplier so we only generate id's when they're needed
-	private static final Supplier<String> ID_SUPPLIER = new Supplier<String>() {
-		@Override
-		public String get() {
-			return UUID.randomUUID().toString();
-		}
-	};
+	private static final IdSupplier ID_SUPPLIER = new IdSupplier();
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {

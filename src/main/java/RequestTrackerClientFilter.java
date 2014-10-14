@@ -10,12 +10,7 @@ import java.util.UUID;
 
 
 public class RequestTrackerClientFilter extends ClientFilter {
-    private static final Supplier<String> ID_SUPPLIER = new Supplier<String>() {
-        @Override
-        public String get() {
-            return UUID.randomUUID().toString();
-        }
-    };
+    private static final IdSupplier ID_SUPPLIER = new IdSupplier();
 
     @Override
     public ClientResponse handle(ClientRequest clientRequest) throws ClientHandlerException {
