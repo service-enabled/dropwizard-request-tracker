@@ -1,3 +1,4 @@
+package com.serviceenabled.dropwizardrequesttracker;
 
 public class RequestTrackerConstants {
     public static final String MDC_KEY = "Request-Tracker";

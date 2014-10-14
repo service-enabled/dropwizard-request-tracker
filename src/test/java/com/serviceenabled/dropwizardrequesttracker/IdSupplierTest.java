@@ -1,3 +1,6 @@
+package com.serviceenabled.dropwizardrequesttracker;
+
+import com.serviceenabled.dropwizardrequesttracker.IdSupplier;
 import org.junit.Test;
 
 import static org.hamcrest.core.IsNot.not;
