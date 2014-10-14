@@ -1,12 +1,11 @@
+package com.serviceenabled.dropwizardrequesttracker;
+
 import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.filter.ClientFilter;
 import org.slf4j.MDC;
-
-import java.util.UUID;
 
 
 public class RequestTrackerClientFilter extends ClientFilter {

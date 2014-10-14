@@ -1,3 +1,5 @@
+package com.serviceenabled.dropwizardrequesttracker;
+
 import com.google.common.base.Supplier;
 
 import java.util.UUID;

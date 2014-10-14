@@ -1,5 +1,6 @@
+package com.serviceenabled.dropwizardrequesttracker;
+
 import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
 import org.slf4j.MDC;
 
 import javax.servlet.Filter;
@@ -10,7 +11,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.UUID;
 
 public class RequestTrackerServletFilter implements Filter {
 	// Use a supplier so we only generate id's when they're needed

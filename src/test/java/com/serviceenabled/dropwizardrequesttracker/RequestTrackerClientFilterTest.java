@@ -1,13 +1,12 @@
-import com.sun.jersey.api.client.ClientHandler;
+package com.serviceenabled.dropwizardrequesttracker;
+
+import com.serviceenabled.dropwizardrequesttracker.RequestTrackerClientFilter;
+import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConstants;
 import com.sun.jersey.api.client.ClientRequest;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.filter.ClientFilter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.slf4j.MDC;
 
 import javax.ws.rs.core.MultivaluedMap;
