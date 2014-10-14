@@ -1,3 +1,5 @@
+import com.google.common.base.Optional;
+import com.google.common.base.Supplier;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
@@ -8,6 +10,12 @@ import java.util.UUID;
 
 
 public class RequestTrackerClientFilter extends ClientFilter {
+    private static final Supplier<String> ID_SUPPLIER = new Supplier<String>() {
+        @Override
+        public String get() {
+            return UUID.randomUUID().toString();
+        }
+    };
 
     @Override
     public ClientResponse handle(ClientRequest clientRequest) throws ClientHandlerException {
@@ -18,13 +26,9 @@ public class RequestTrackerClientFilter extends ClientFilter {
     }
 
     protected ClientRequest doWork(ClientRequest clientRequest) {
-        String logId= MDC.get("Request-Tracker");
+        Optional<String> requestId = Optional.fromNullable(MDC.get("Request-Tracker"));
 
-        if(logId == null) {
-            logId = UUID.randomUUID().toString();
-        }
-
-        clientRequest.getHeaders().add("X-Request-Tracker", logId);
+        clientRequest.getHeaders().add("X-Request-Tracker", requestId.or(ID_SUPPLIER));
 
         return clientRequest;
     }
