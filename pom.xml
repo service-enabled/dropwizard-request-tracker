@@ -30,6 +30,12 @@
 			<artifactId>dropwizard-testing</artifactId>
 			<scope>test</scope>
 			<version>${dropwizard.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.objenesis</groupId>
+					<artifactId>objenesis</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
