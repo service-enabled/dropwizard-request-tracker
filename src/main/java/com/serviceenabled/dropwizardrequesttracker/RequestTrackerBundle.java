@@ -1,3 +1,5 @@
+package com.serviceenabled.dropwizardrequesttracker;
+
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
