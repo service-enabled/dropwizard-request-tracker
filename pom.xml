@@ -26,6 +26,18 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>io.dropwizard</groupId>
+			<artifactId>dropwizard-testing</artifactId>
+			<scope>test</scope>
+			<version>${dropwizard.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.objenesis</groupId>
+					<artifactId>objenesis</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>1.9.5</version>
