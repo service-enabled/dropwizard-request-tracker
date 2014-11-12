@@ -1,9 +1,14 @@
 package com.serviceenabled.dropwizardrequesttracker.com.serviceenabled.dropwizardrequesttracker.it;
 
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 
-@Path("/")
+@Path("/test")
 public class TestResource {
 
+    @POST
+    public String test(){
+        return "test";
+    }
 }

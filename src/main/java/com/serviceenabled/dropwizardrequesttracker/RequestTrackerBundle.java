@@ -6,6 +6,9 @@ import io.dropwizard.setup.Environment;
 
 import com.serviceenabled.dropwizardrequesttracker.RequestTrackerServletFilter;
 
+import javax.servlet.DispatcherType;
+import java.util.EnumSet;
+
 
 public class RequestTrackerBundle<T> implements ConfiguredBundle<T> {
 
@@ -22,7 +25,8 @@ public class RequestTrackerBundle<T> implements ConfiguredBundle<T> {
 	@Override
 	public void run(T configuration, Environment environment) throws Exception {
 		environment.servlets()
-			.addFilter("request-tracker-servlet-filter", new RequestTrackerServletFilter(header));
+				.addFilter("request-tracker-servlet-filter", new RequestTrackerServletFilter(header))
+				.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "*");
 	}
 
 	@Override
