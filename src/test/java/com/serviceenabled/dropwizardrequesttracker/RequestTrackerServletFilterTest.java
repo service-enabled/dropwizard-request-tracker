@@ -1,10 +1,11 @@
 package com.serviceenabled.dropwizardrequesttracker;
 
-import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConstants;
-import com.serviceenabled.dropwizardrequesttracker.RequestTrackerServletFilter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.MDC;
 
 import javax.servlet.FilterChain;
@@ -14,18 +15,16 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class RequestTrackerServletFilterTest {
 	private RequestTrackerServletFilter requestTrackerServletFilter;
 
-	private HttpServletRequest request = mock(HttpServletRequest.class);
-	private ServletResponse response = mock(ServletResponse.class);
-	private FilterChain chain = mock(FilterChain.class);
+	@Mock private HttpServletRequest request;
+	@Mock private ServletResponse response;
+	@Mock private FilterChain chain;
 
 	@Before
 	public void setUp() throws Exception {
@@ -35,7 +34,6 @@ public class RequestTrackerServletFilterTest {
 	@After
 	public void tearDown() throws Exception {
 		MDC.clear();
-		reset(request, response, chain);
 	}
 
 	@Test
@@ -49,7 +47,15 @@ public class RequestTrackerServletFilterTest {
 	public void checksForHeader() throws Exception {
 		requestTrackerServletFilter.doFilter(request, response, chain);
 
-		verify(request).getHeader(RequestTrackerConstants.LOG_ID_HEADER);
+		verify(request).getHeader(RequestTrackerConstants.DEFAULT_LOG_ID_HEADER);
+	}
+
+	@Test
+	public void checksForCustomHeader() throws Exception {
+		RequestTrackerServletFilter requestTrackerServletFilter = new RequestTrackerServletFilter("foo");
+		requestTrackerServletFilter.doFilter(request, response, chain);
+
+		verify(request).getHeader("foo");
 	}
 
 	@Test
@@ -63,11 +69,12 @@ public class RequestTrackerServletFilterTest {
 	@Test
 	public void reusesIdWhenHeaderPresent() throws Exception {
 		String headerId = UUID.randomUUID().toString();
-		when(request.getHeader(RequestTrackerConstants.LOG_ID_HEADER)).thenReturn(headerId);
+		when(request.getHeader(RequestTrackerConstants.DEFAULT_LOG_ID_HEADER)).thenReturn(headerId);
 
 		requestTrackerServletFilter.doFilter(request, response, chain);
 
 		String idInLog = MDC.get(RequestTrackerConstants.MDC_KEY);
 		assertThat(idInLog, equalTo(headerId));
 	}
+
 }

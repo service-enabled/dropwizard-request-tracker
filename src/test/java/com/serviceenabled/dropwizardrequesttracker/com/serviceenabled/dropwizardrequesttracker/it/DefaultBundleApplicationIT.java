@@ -10,14 +10,13 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 
-public class RequestTrackerBundleIT {
+public class DefaultBundleApplicationIT {
 	@ClassRule
-	public static final DropwizardAppRule<Configuration> RULE = new DropwizardAppRule<Configuration>(TestApplication.class,null);
+	public static final DropwizardAppRule<Configuration> RULE = new DropwizardAppRule<Configuration>(DefaultBundleApplication.class,null);
 	
 	@Test
 	public void bundleAddsFilter(){
 		Environment e = RULE.getEnvironment();
 		assertThat(e.getApplicationContext().getServletHandler().getFilter("request-tracker-servlet-filter"),notNullValue());
 	}
-
 }

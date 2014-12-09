@@ -1,12 +1,14 @@
 package com.serviceenabled.dropwizardrequesttracker;
 
-import com.serviceenabled.dropwizardrequesttracker.RequestTrackerClientFilter;
-import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConstants;
 import com.sun.jersey.api.client.ClientRequest;
+import com.sun.jersey.api.client.filter.ClientFilter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.MDC;
 
 import javax.ws.rs.core.MultivaluedMap;
@@ -21,11 +23,12 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
 
+@RunWith(MockitoJUnitRunner.class)
 public class RequestTrackerClientFilterTest {
     private RequestTrackerClientFilter requestTrackerClientFilter;
 
-    private ClientRequest clientRequest = mock(ClientRequest.class);
-    private MultivaluedMap<String,Object> headersMap = mock(MultivaluedMap.class);
+    @Mock private ClientRequest clientRequest;
+    @Mock private MultivaluedMap<String,Object> headersMap;
 
     @Before
     public void setUp() {
@@ -46,7 +49,8 @@ public class RequestTrackerClientFilterTest {
     @Test
     public void setsTheRequestTrackerHeader() {
         requestTrackerClientFilter.doWork(clientRequest);
-        verify(headersMap).add(eq(RequestTrackerConstants.LOG_ID_HEADER), Mockito.any(UUID.class));
+
+        verify(headersMap).add(eq(RequestTrackerConstants.DEFAULT_LOG_ID_HEADER), Mockito.any(UUID.class));
     }
 
     @Test
@@ -54,6 +58,16 @@ public class RequestTrackerClientFilterTest {
         String logId = UUID.randomUUID().toString();
         MDC.put(RequestTrackerConstants.MDC_KEY,logId);
         requestTrackerClientFilter.doWork(clientRequest);
-        verify(headersMap).add(eq(RequestTrackerConstants.LOG_ID_HEADER), eq(logId));
+
+        verify(headersMap).add(eq(RequestTrackerConstants.DEFAULT_LOG_ID_HEADER), eq(logId));
+    }
+
+    @Test
+    public void allowsHeaderToBeCustomized() {
+        RequestTrackerClientFilter requestTrackerClientFilter = new RequestTrackerClientFilter("foo");
+        when(clientRequest.getHeaders()).thenReturn(headersMap);
+        requestTrackerClientFilter.doWork(clientRequest);
+
+        verify(headersMap).add(eq("foo"), Mockito.any(UUID.class));
     }
 }

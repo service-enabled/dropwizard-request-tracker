@@ -15,6 +15,15 @@ import java.io.IOException;
 public class RequestTrackerServletFilter implements Filter {
 	// Use a supplier so we only generate id's when they're needed
 	private static final IdSupplier ID_SUPPLIER = new IdSupplier();
+	private final String header;
+
+	public RequestTrackerServletFilter(String header) {
+		this.header = header;
+	}
+
+	public RequestTrackerServletFilter() {
+		this.header = RequestTrackerConstants.DEFAULT_LOG_ID_HEADER;
+	}
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -24,7 +33,7 @@ public class RequestTrackerServletFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-		Optional<String> requestId = Optional.fromNullable(httpServletRequest.getHeader(RequestTrackerConstants.LOG_ID_HEADER));
+		Optional<String> requestId = Optional.fromNullable(httpServletRequest.getHeader(header));
 		MDC.put(RequestTrackerConstants.MDC_KEY, requestId.or(ID_SUPPLIER));
 		chain.doFilter(request, response);
 	}

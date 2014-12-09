@@ -9,6 +9,16 @@ import org.slf4j.MDC;
 
 
 public class RequestTrackerClientFilter extends ClientFilter {
+    private final String header;
+
+    public RequestTrackerClientFilter(String header) {
+       this.header = header;
+    }
+
+    public RequestTrackerClientFilter() {
+        this.header = RequestTrackerConstants.DEFAULT_LOG_ID_HEADER;
+    }
+
     private static final IdSupplier ID_SUPPLIER = new IdSupplier();
 
     @Override
@@ -22,7 +32,7 @@ public class RequestTrackerClientFilter extends ClientFilter {
     protected ClientRequest doWork(ClientRequest clientRequest) {
         Optional<String> requestId = Optional.fromNullable(MDC.get(RequestTrackerConstants.MDC_KEY));
 
-        clientRequest.getHeaders().add(RequestTrackerConstants.LOG_ID_HEADER, requestId.or(ID_SUPPLIER));
+        clientRequest.getHeaders().add(header, requestId.or(ID_SUPPLIER));
 
         return clientRequest;
     }
