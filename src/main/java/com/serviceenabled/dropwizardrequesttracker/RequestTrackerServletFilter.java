@@ -1,6 +1,7 @@
 package com.serviceenabled.dropwizardrequesttracker;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Supplier;
 import org.slf4j.MDC;
 
 import javax.servlet.Filter;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 public class RequestTrackerServletFilter implements Filter {
 	// Use a supplier so we only generate id's when they're needed
-	private static final IdSupplier ID_SUPPLIER = new IdSupplier();
+	private static final Supplier<String> ID_SUPPLIER = new UuidSupplier();
 	private final String header;
 
 	public RequestTrackerServletFilter(String header) {
@@ -22,7 +23,7 @@ public class RequestTrackerServletFilter implements Filter {
 	}
 
 	public RequestTrackerServletFilter() {
-		this.header = RequestTrackerConstants.DEFAULT_LOG_ID_HEADER;
+		this.header = RequestTrackerConstants.DEFAULT_HEADER;
 	}
 
 	@Override
@@ -34,7 +35,7 @@ public class RequestTrackerServletFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		Optional<String> requestId = Optional.fromNullable(httpServletRequest.getHeader(header));
-		MDC.put(RequestTrackerConstants.MDC_KEY, requestId.or(ID_SUPPLIER));
+		MDC.put(RequestTrackerConstants.DEFAULT_MDC_KEY, requestId.or(ID_SUPPLIER));
 		chain.doFilter(request, response);
 	}
 

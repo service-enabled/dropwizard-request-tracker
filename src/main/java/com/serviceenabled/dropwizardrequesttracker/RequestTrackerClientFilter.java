@@ -1,6 +1,7 @@
 package com.serviceenabled.dropwizardrequesttracker;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Supplier;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
@@ -16,10 +17,10 @@ public class RequestTrackerClientFilter extends ClientFilter {
     }
 
     public RequestTrackerClientFilter() {
-        this.header = RequestTrackerConstants.DEFAULT_LOG_ID_HEADER;
+        this.header = RequestTrackerConstants.DEFAULT_HEADER;
     }
 
-    private static final IdSupplier ID_SUPPLIER = new IdSupplier();
+    private static final Supplier<String> ID_SUPPLIER = new UuidSupplier();
 
     @Override
     public ClientResponse handle(ClientRequest clientRequest) throws ClientHandlerException {
@@ -30,7 +31,7 @@ public class RequestTrackerClientFilter extends ClientFilter {
     }
 
     protected ClientRequest doWork(ClientRequest clientRequest) {
-        Optional<String> requestId = Optional.fromNullable(MDC.get(RequestTrackerConstants.MDC_KEY));
+        Optional<String> requestId = Optional.fromNullable(MDC.get(RequestTrackerConstants.DEFAULT_MDC_KEY));
 
         clientRequest.getHeaders().add(header, requestId.or(ID_SUPPLIER));
 

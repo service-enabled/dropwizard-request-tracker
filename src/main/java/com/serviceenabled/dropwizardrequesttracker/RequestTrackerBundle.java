@@ -4,8 +4,6 @@ import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-import com.serviceenabled.dropwizardrequesttracker.RequestTrackerServletFilter;
-
 import javax.servlet.DispatcherType;
 import java.util.EnumSet;
 
@@ -19,7 +17,7 @@ public class RequestTrackerBundle<T> implements ConfiguredBundle<T> {
 	}
 
 	public RequestTrackerBundle() {
-		this.header = RequestTrackerConstants.DEFAULT_LOG_ID_HEADER;
+		this.header = RequestTrackerConstants.DEFAULT_HEADER;
 	}
 
 	@Override

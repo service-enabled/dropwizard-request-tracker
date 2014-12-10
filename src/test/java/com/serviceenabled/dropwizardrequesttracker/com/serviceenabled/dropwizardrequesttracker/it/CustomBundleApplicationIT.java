@@ -11,7 +11,6 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
@@ -20,12 +19,12 @@ import static org.hamcrest.core.IsNull.nullValue;
 
 public class CustomBundleApplicationIT {
 	@ClassRule
-	public static final DropwizardAppRule<Configuration> RULE = new DropwizardAppRule<Configuration>(CustomBundleApplication.class,null);
+	public static final DropwizardAppRule<Configuration> RULE = new DropwizardAppRule<Configuration>(CustomBundleApplication.class, null);
 	
 	@Test
 	public void bundleAddsFilter(){
 		Environment e = RULE.getEnvironment();
-		assertThat(e.getApplicationContext().getServletHandler().getFilter("request-tracker-servlet-filter"),notNullValue());
+		assertThat(e.getApplicationContext().getServletHandler().getFilter("request-tracker-servlet-filter"), notNullValue());
 	}
 
 	@Test
@@ -33,8 +32,8 @@ public class CustomBundleApplicationIT {
 		Client client = new Client();
 		client.addFilter(new RequestTrackerClientFilter("foo"));
 
-		URI initialURI = new URI("HTTP",null,"localhost",RULE.getLocalPort(),"/client-test",null,null);
-		URI secondaryURI = new URI("HTTP",null,"localhost",RULE.getLocalPort(),"/mock-test",null,null);
+		URI initialURI = new URI("HTTP", null, "localhost", RULE.getLocalPort(), "/client-test", null, null);
+		URI secondaryURI = new URI("HTTP", null, "localhost", RULE.getLocalPort(), "/mock-test", null, null);
 
 		ClientTestResource clientTest = new ClientTestResource(secondaryURI, client);
 		MockTestResource mockTest = new MockTestResource();
@@ -47,7 +46,7 @@ public class CustomBundleApplicationIT {
 		client.resource(initialURI).post(ClientResponse.class);
 
 		assertThat(mockTest.getHeaders().getRequestHeader("foo"), notNullValue());
-		assertThat(mockTest.getHeaders().getRequestHeader(RequestTrackerConstants.DEFAULT_LOG_ID_HEADER), nullValue());
+		assertThat(mockTest.getHeaders().getRequestHeader(RequestTrackerConstants.DEFAULT_HEADER), nullValue());
 	}
 
 }

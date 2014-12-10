@@ -54,16 +54,16 @@ public class DefaultBundleApplicationIT {
 	public void addsTrackerToOutgoingRequest() throws Exception {
 		CLIENT.resource(INITIAL_URI).post(ClientResponse.class);
 
-		assertThat(MOCK_TEST.getLogId(), notNullValue());
+		assertThat(MOCK_TEST.getRequestTrackerId(), notNullValue());
 	}
 
 	@Test
 	public void keepsTheId() throws Exception {
 		Client client = new Client();
 		UUID id = UUID.randomUUID();
-		client.resource(INITIAL_URI).header(RequestTrackerConstants.DEFAULT_LOG_ID_HEADER, id).post(ClientResponse.class);
+		client.resource(INITIAL_URI).header(RequestTrackerConstants.DEFAULT_HEADER, id).post(ClientResponse.class);
 
-		assertThat(MOCK_TEST.getLogId(), equalTo(id.toString()));
+		assertThat(MOCK_TEST.getRequestTrackerId(), equalTo(id.toString()));
 	}
 
 }

@@ -1,15 +1,11 @@
 package com.serviceenabled.dropwizardrequesttracker.com.serviceenabled.dropwizardrequesttracker.it;
 
 import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConstants;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
 
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
-import java.net.URI;
 
 import static org.mockito.Mockito.mock;
 
@@ -18,11 +14,11 @@ import static org.mockito.Mockito.mock;
  */
 @Path("/mock-test")
 public class MockTestResource {
-    private String logId;
+    private String requestTrackerId;
     private HttpHeaders headers;
 
-    public String getLogId() {
-        return logId;
+    public String getRequestTrackerId() {
+        return requestTrackerId;
     }
 
     public HttpHeaders getHeaders() {
@@ -32,6 +28,6 @@ public class MockTestResource {
     @POST
     public void test(@Context HttpHeaders headers){
         this.headers = headers;
-        this.logId = headers.getRequestHeader(RequestTrackerConstants.DEFAULT_LOG_ID_HEADER).get(0);
+        this.requestTrackerId = headers.getRequestHeader(RequestTrackerConstants.DEFAULT_HEADER).get(0);
     }
 }

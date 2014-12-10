@@ -9,8 +9,8 @@ import java.util.UUID;
 /**
  * Supplies a random id
  */
-public class IdSupplier implements Supplier<String> {
-	private Logger logger = LoggerFactory.getLogger(IdSupplier.class);
+public class UuidSupplier implements Supplier<String> {
+	private Logger logger = LoggerFactory.getLogger(UuidSupplier.class);
 
 	@Override
 	public String get() {

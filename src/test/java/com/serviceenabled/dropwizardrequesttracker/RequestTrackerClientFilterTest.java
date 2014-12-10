@@ -1,7 +1,6 @@
 package com.serviceenabled.dropwizardrequesttracker;
 
 import com.sun.jersey.api.client.ClientRequest;
-import com.sun.jersey.api.client.filter.ClientFilter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,16 +49,16 @@ public class RequestTrackerClientFilterTest {
     public void setsTheRequestTrackerHeader() {
         requestTrackerClientFilter.doWork(clientRequest);
 
-        verify(headersMap).add(eq(RequestTrackerConstants.DEFAULT_LOG_ID_HEADER), Mockito.any(UUID.class));
+        verify(headersMap).add(eq(RequestTrackerConstants.DEFAULT_HEADER), Mockito.any(UUID.class));
     }
 
     @Test
     public void usesExistingMDCValueWhenPresent() {
         String logId = UUID.randomUUID().toString();
-        MDC.put(RequestTrackerConstants.MDC_KEY,logId);
+        MDC.put(RequestTrackerConstants.DEFAULT_MDC_KEY,logId);
         requestTrackerClientFilter.doWork(clientRequest);
 
-        verify(headersMap).add(eq(RequestTrackerConstants.DEFAULT_LOG_ID_HEADER), eq(logId));
+        verify(headersMap).add(eq(RequestTrackerConstants.DEFAULT_HEADER), eq(logId));
     }
 
     @Test
