@@ -4,32 +4,23 @@ import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-import javax.servlet.DispatcherType;
 import java.util.EnumSet;
 
+import javax.servlet.DispatcherType;
 
-public class RequestTrackerBundle<T> implements ConfiguredBundle<T> {
-
-	private final String header;
-
-	public RequestTrackerBundle(String header) {
-		this.header = header;
-	}
-
-	public RequestTrackerBundle() {
-		this.header = RequestTrackerConstants.DEFAULT_HEADER;
-	}
+public abstract class RequestTrackerBundle<T> implements ConfiguredBundle<T> {
 
 	@Override
 	public void run(T configuration, Environment environment) throws Exception {
+		RequestTrackerConfiguration requestTrackerConfiguration = this.getRequestTrackerConfiguration(configuration);
 		environment.servlets()
-				.addFilter("request-tracker-servlet-filter", new RequestTrackerServletFilter(header))
+				.addFilter("request-tracker-servlet-filter", new RequestTrackerServletFilter(requestTrackerConfiguration))
 				.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "*");
 	}
 
 	@Override
-	public void initialize(Bootstrap<?> bootstrap) {
-		
-	}
+	public void initialize(Bootstrap<?> bootstrap) {}
+	
+	public abstract RequestTrackerConfiguration getRequestTrackerConfiguration(T configuration);
 
 }

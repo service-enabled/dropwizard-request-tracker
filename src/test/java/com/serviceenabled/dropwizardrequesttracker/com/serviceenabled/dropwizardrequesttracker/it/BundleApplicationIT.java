@@ -3,34 +3,35 @@ package com.serviceenabled.dropwizardrequesttracker.com.serviceenabled.dropwizar
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-
-import com.serviceenabled.dropwizardrequesttracker.RequestTrackerClientFilter;
-import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConstants;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+
+import java.net.URI;
+import java.util.UUID;
 
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.net.URI;
-import java.util.UUID;
+import com.serviceenabled.dropwizardrequesttracker.RequestTrackerClientFilter;
+import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConfiguration;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
 
 
-public class DefaultBundleApplicationIT {
+public class BundleApplicationIT {
 	@ClassRule
-	public static final DropwizardAppRule<Configuration> RULE = new DropwizardAppRule<Configuration>(DefaultBundleApplication.class,null);
+	public static final DropwizardAppRule<BundleConfiguration> RULE = new DropwizardAppRule<BundleConfiguration>(BundleApplication.class, null);
 	private static final Client CLIENT = new Client();
 	private static ClientTestResource CLIENT_TEST;
 	private static MockTestResource MOCK_TEST;
 	private static URI INITIAL_URI;
+	private static RequestTrackerConfiguration CONFIGURATION;
 
 	@BeforeClass
 	public static void setupApplication() throws Exception {
-		CLIENT.addFilter(new RequestTrackerClientFilter());
+		CONFIGURATION = RULE.getConfiguration().getRequestTrackerConfiguration();
+		CLIENT.addFilter(new RequestTrackerClientFilter(CONFIGURATION));
 
 		INITIAL_URI = new URI("HTTP",null,"localhost",RULE.getLocalPort(),"/client-test",null,null);
 		URI secondaryURI = new URI("HTTP",null,"localhost",RULE.getLocalPort(),"/mock-test",null,null);
@@ -61,9 +62,8 @@ public class DefaultBundleApplicationIT {
 	public void keepsTheId() throws Exception {
 		Client client = new Client();
 		UUID id = UUID.randomUUID();
-		client.resource(INITIAL_URI).header(RequestTrackerConstants.DEFAULT_HEADER, id).post(ClientResponse.class);
+		client.resource(INITIAL_URI).header(CONFIGURATION.getHeaderName(), id).post(ClientResponse.class);
 
 		assertThat(MOCK_TEST.getRequestTrackerId(), equalTo(id.toString()));
 	}
-
 }

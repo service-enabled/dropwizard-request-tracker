@@ -1,23 +1,20 @@
 package com.serviceenabled.dropwizardrequesttracker;
 
+import org.slf4j.MDC;
+
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.filter.ClientFilter;
-import org.slf4j.MDC;
 
 
 public class RequestTrackerClientFilter extends ClientFilter {
-    private final String header;
+    private final RequestTrackerConfiguration configuration;
 
-    public RequestTrackerClientFilter(String header) {
-       this.header = header;
-    }
-
-    public RequestTrackerClientFilter() {
-        this.header = RequestTrackerConstants.DEFAULT_HEADER;
+    public RequestTrackerClientFilter(RequestTrackerConfiguration configuration) {
+        this.configuration = configuration;
     }
 
     private static final Supplier<String> ID_SUPPLIER = new UuidSupplier();
@@ -31,9 +28,9 @@ public class RequestTrackerClientFilter extends ClientFilter {
     }
 
     protected ClientRequest doWork(ClientRequest clientRequest) {
-        Optional<String> requestId = Optional.fromNullable(MDC.get(RequestTrackerConstants.DEFAULT_MDC_KEY));
+        Optional<String> requestId = Optional.fromNullable(MDC.get(configuration.getMdcKey()));
 
-        clientRequest.getHeaders().add(header, requestId.or(ID_SUPPLIER));
+        clientRequest.getHeaders().add(configuration.getHeaderName(), requestId.or(ID_SUPPLIER));
 
         return clientRequest;
     }
