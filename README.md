@@ -12,6 +12,7 @@ This project uses servlet filters, Jersey client filters, and [Logback's MDC](ht
 
 There's a Dropwizard bundle that will add in the servlet filter for you. Jersey client filters have to be manually added to your client classes.
 
+
 Integrating with existing dropwizard project
 --------------------------------------------
 
@@ -21,47 +22,46 @@ Add the following dependency into your pom.xml
 <dependency>
     <groupId>com.serviceenabled</groupId>
     <artifactId>dropwizard-request-tracker</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
+```
+
+Add `RequestTrackerConfiguration` into your application's configuration class.
+
+```java
+public class ExampleConfiguration extends Configuration {
+
+    private RequestTrackerConfiguration requestTrackerConfiguration = new RequestTrackerConfiguration();
+
+    public RequestTrackerConfiguration getRequestTrackerConfiguration() {
+        return requestTrackerConfiguration;
+    }
+
+    public void setRequestTrackerConfiguration(RequestTrackerConfiguration configuration) {
+        this.requestTrackerConfiguration = configuration;
+    }
+}
+```
+
+Add the `RequestTrackerBundle` to your application
+
+```java
+bootstrap.addBundle(new RequestTrackerBundle<ExampleConfiguration>() {
+    @Override
+    public RequestTrackerConfiguration getRequestTrackerConfiguration(BundleConfiguration configuration) {
+        return configuration.getRequestTrackerConfiguration();
+    }
+});
 ```
 
 and `mvn clean install`
 
-Examples
+
+Defaults
 --------
 
-### Use default HTTP header
+The `RequestTrackerConfiguration` sets the HTTP header name to `X-Request-Tracker` and the MDC key to `Request-Tracker` by default.  These can be overridden in your YAML configuration.
 
-The default HTTP header is `X-Request-Tracker` and the default MDC key is `Request-Tracker`
-
-```
-
-bootstrap.addBundle(new RequestTrackerBundle<Configuration>());
-
-```
-
-```
-
-client.addFilter(new RequestTrackerClientFilter());
-
-```
-
-### Customize the HTTP Header
-
-The HTTP header can be customized through the `RequestTrackerBundle` constructor.
-
-```
-
-bootstrap.addBundle(new RequestTrackerBundle<Configuration>("foo"));
-
-```
-
-
-```
-
-client.addFilter(new RequestTrackerClientFilter("foo"));
-
-```
 
 License
 -------
