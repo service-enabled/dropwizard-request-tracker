@@ -54,6 +54,12 @@ bootstrap.addBundle(new RequestTrackerBundle<ExampleConfiguration>() {
 });
 ```
 
+Add the client filter to your client classes
+
+```java
+client.addFilter(new RequestTrackerClientFilter(configuration.getRequestTrackerConfiguration()));
+```
+
 and `mvn clean install`
 
 
