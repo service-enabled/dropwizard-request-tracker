@@ -1,14 +1,11 @@
 package com.serviceenabled.dropwizardrequesttracker.com.serviceenabled.dropwizardrequesttracker.it;
 
-import com.serviceenabled.dropwizardrequesttracker.RequestTrackerClientFilter;
-import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConstants;
-import com.sun.jersey.api.client.Client;
+import java.net.URI;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import java.net.URI;
+
+import com.sun.jersey.api.client.Client;
 
 /**
  * Created by rmuhic on 11/11/2014.

@@ -1,6 +1,15 @@
 package com.serviceenabled.dropwizardrequesttracker;
 
-import com.sun.jersey.api.client.ClientRequest;
+import static org.hamcrest.CoreMatchers.any;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.UUID;
+
+import javax.ws.rs.core.MultivaluedMap;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,28 +19,21 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.MDC;
 
-import javax.ws.rs.core.MultivaluedMap;
-
-import java.util.UUID;
-
-import static org.hamcrest.CoreMatchers.any;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
+import com.sun.jersey.api.client.ClientRequest;
 
 
 @RunWith(MockitoJUnitRunner.class)
 public class RequestTrackerClientFilterTest {
     private RequestTrackerClientFilter requestTrackerClientFilter;
+    private RequestTrackerConfiguration configuration;
 
     @Mock private ClientRequest clientRequest;
     @Mock private MultivaluedMap<String,Object> headersMap;
 
     @Before
     public void setUp() {
-        requestTrackerClientFilter = new RequestTrackerClientFilter();
+    	this.configuration = new RequestTrackerConfiguration();
+        requestTrackerClientFilter = new RequestTrackerClientFilter(this.configuration);
         when(clientRequest.getHeaders()).thenReturn(headersMap);
     }
 
@@ -49,24 +51,15 @@ public class RequestTrackerClientFilterTest {
     public void setsTheRequestTrackerHeader() {
         requestTrackerClientFilter.doWork(clientRequest);
 
-        verify(headersMap).add(eq(RequestTrackerConstants.DEFAULT_HEADER), Mockito.any(UUID.class));
+        verify(headersMap).add(eq(this.configuration.getHeaderName()), Mockito.any(UUID.class));
     }
 
     @Test
     public void usesExistingMDCValueWhenPresent() {
         String logId = UUID.randomUUID().toString();
-        MDC.put(RequestTrackerConstants.DEFAULT_MDC_KEY,logId);
+        MDC.put(this.configuration.getMdcKey(), logId);
         requestTrackerClientFilter.doWork(clientRequest);
 
-        verify(headersMap).add(eq(RequestTrackerConstants.DEFAULT_HEADER), eq(logId));
-    }
-
-    @Test
-    public void allowsHeaderToBeCustomized() {
-        RequestTrackerClientFilter requestTrackerClientFilter = new RequestTrackerClientFilter("foo");
-        when(clientRequest.getHeaders()).thenReturn(headersMap);
-        requestTrackerClientFilter.doWork(clientRequest);
-
-        verify(headersMap).add(eq("foo"), Mockito.any(UUID.class));
+        verify(headersMap).add(eq(this.configuration.getHeaderName()), eq(logId));
     }
 }

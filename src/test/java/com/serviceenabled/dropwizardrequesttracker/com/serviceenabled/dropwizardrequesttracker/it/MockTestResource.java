@@ -1,13 +1,11 @@
 package com.serviceenabled.dropwizardrequesttracker.com.serviceenabled.dropwizardrequesttracker.it;
 
-import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConstants;
-
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 
-import static org.mockito.Mockito.mock;
+import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConfiguration;
 
 /**
  * Created by rmuhic on 11/11/2014.
@@ -26,8 +24,8 @@ public class MockTestResource {
     }
 
     @POST
-    public void test(@Context HttpHeaders headers){
+    public void test(@Context HttpHeaders headers) {
         this.headers = headers;
-        this.requestTrackerId = headers.getRequestHeader(RequestTrackerConstants.DEFAULT_HEADER).get(0);
+        this.requestTrackerId = headers.getRequestHeader(new RequestTrackerConfiguration().getHeaderName()).get(0);
     }
 }
