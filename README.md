@@ -60,6 +60,8 @@ Add the client filter to your client classes
 client.addFilter(new RequestTrackerClientFilter(configuration.getRequestTrackerConfiguration()));
 ```
 
+If you'd like the ID to be output in your logs, add `%X{Request-Tracker}` to your [logFormat](https://dropwizard.github.io/dropwizard/manual/configuration.html#logging).
+
 and `mvn clean install`
 
 
