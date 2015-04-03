@@ -1,0 +1,4 @@
+requestTracker:
+  headerName: custom-header
+  supplier:
+    implementationClass: com.serviceenabled.dropwizardrequesttracker.it.CustomSupplier

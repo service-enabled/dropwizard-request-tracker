@@ -2,6 +2,8 @@ package com.serviceenabled.dropwizardrequesttracker;
 
 import org.junit.Test;
 
+import com.serviceenabled.dropwizardrequesttracker.supplier.UuidSupplier;
+
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
 import static org.junit.Assert.*;

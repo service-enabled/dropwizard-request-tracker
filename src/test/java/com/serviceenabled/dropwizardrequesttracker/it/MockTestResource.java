@@ -12,20 +12,18 @@ import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConfiguration;
  */
 @Path("/mock-test")
 public class MockTestResource {
-    private String requestTrackerId;
     private HttpHeaders headers;
 
     public String getRequestTrackerId() {
-        return requestTrackerId;
+        return headers.getRequestHeader(new RequestTrackerConfiguration().getHeaderName()).get(0);
     }
-
-    public HttpHeaders getHeaders() {
-        return headers;
+    
+    public String getRequestTrackerId(String headerName) {
+    	return headers.getRequestHeader(headerName).get(0);
     }
 
     @POST
     public void test(@Context HttpHeaders headers) {
         this.headers = headers;
-        this.requestTrackerId = headers.getRequestHeader(new RequestTrackerConfiguration().getHeaderName()).get(0);
     }
 }

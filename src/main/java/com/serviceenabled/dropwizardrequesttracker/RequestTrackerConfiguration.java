@@ -1,5 +1,8 @@
 package com.serviceenabled.dropwizardrequesttracker;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.serviceenabled.dropwizardrequesttracker.supplier.SupplierFactory;
+
 public class RequestTrackerConfiguration {
 
 	public RequestTrackerConfiguration() {}
@@ -8,6 +11,9 @@ public class RequestTrackerConfiguration {
 		setHeaderName(headerName);
 		setMdcKey(mdcKey);
 	}
+
+	@JsonProperty("supplier")
+	private SupplierFactory supplierFactory = new SupplierFactory();
 	
 	private String headerName = "X-Request-Tracker";
 	private String mdcKey = "Request-Tracker";
@@ -26,5 +32,13 @@ public class RequestTrackerConfiguration {
 	
 	public void setMdcKey(String mdcKey) {
 		this.mdcKey = mdcKey;
+	}
+
+	public SupplierFactory getSupplierFactory() {
+		return supplierFactory;
+	}
+
+	public void setSupplierFactory(SupplierFactory supplierFactory) {
+		this.supplierFactory = supplierFactory;
 	}
 }

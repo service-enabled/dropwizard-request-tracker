@@ -16,8 +16,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 
 public class RequestTrackerServletFilter implements Filter {
-	// Use a supplier so we only generate id's when they're needed
-	private static final Supplier<String> ID_SUPPLIER = new UuidSupplier();
 	private final RequestTrackerConfiguration configuration;
 
 	public RequestTrackerServletFilter(RequestTrackerConfiguration configuration) {
@@ -31,12 +29,14 @@ public class RequestTrackerServletFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		Optional<String> requestId = Optional.fromNullable(httpServletRequest.getHeader(configuration.getHeaderName()));
-		MDC.put(configuration.getMdcKey(), requestId.or(ID_SUPPLIER));
+		MDC.put(configuration.getMdcKey(), requestId.or(getSupplier()));
 		chain.doFilter(request, response);
 	}
 
 	@Override
-	public void destroy() {
+	public void destroy() {}
 
+	private Supplier<String> getSupplier() {
+		return this.configuration.getSupplierFactory().build();
 	}
 }
