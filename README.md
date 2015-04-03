@@ -68,8 +68,17 @@ and `mvn clean install`
 Defaults
 --------
 
-The `RequestTrackerConfiguration` sets the HTTP header name to `X-Request-Tracker` and the MDC key to `Request-Tracker` by default.  These can be overridden in your YAML configuration.
+The `RequestTrackerConfiguration` sets the HTTP header name to `X-Request-Tracker` and the MDC key to `Request-Tracker` by default.  These can be overridden in your YAML configuration.  The default ID generated is a UUID.  If you would like something other than a UUID, you can provide your own implementation class in the configuration.
 
+Example YAML
+-------
+```yaml
+requestTracker:
+  headerName: Custom Header
+  mdcKey: Custom Key
+  supplier:
+    implementationClass: com.your.package.CustomSupplier
+```
 
 License
 -------
