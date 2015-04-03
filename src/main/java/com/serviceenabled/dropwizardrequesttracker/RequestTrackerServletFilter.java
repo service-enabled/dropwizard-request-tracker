@@ -17,9 +17,11 @@ import com.google.common.base.Supplier;
 
 public class RequestTrackerServletFilter implements Filter {
 	private final RequestTrackerConfiguration configuration;
+	private Supplier<String> supplier;
 
 	public RequestTrackerServletFilter(RequestTrackerConfiguration configuration) {
 		this.configuration = configuration;
+		this.supplier = this.configuration.getSupplierFactory().build();
 	}
 	
 	@Override
@@ -29,14 +31,10 @@ public class RequestTrackerServletFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		Optional<String> requestId = Optional.fromNullable(httpServletRequest.getHeader(configuration.getHeaderName()));
-		MDC.put(configuration.getMdcKey(), requestId.or(getSupplier()));
+		MDC.put(configuration.getMdcKey(), requestId.or(this.supplier));
 		chain.doFilter(request, response);
 	}
 
 	@Override
 	public void destroy() {}
-
-	private Supplier<String> getSupplier() {
-		return this.configuration.getSupplierFactory().build();
-	}
 }

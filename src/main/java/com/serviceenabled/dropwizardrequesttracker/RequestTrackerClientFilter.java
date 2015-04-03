@@ -11,9 +11,11 @@ import com.sun.jersey.api.client.filter.ClientFilter;
 
 public class RequestTrackerClientFilter extends ClientFilter {
     private final RequestTrackerConfiguration configuration;
+    private Supplier<String> supplier;
 
     public RequestTrackerClientFilter(RequestTrackerConfiguration configuration) {
         this.configuration = configuration;
+        this.supplier = this.configuration.getSupplierFactory().build(); 
     }
 
     @Override
@@ -27,12 +29,8 @@ public class RequestTrackerClientFilter extends ClientFilter {
     protected ClientRequest doWork(ClientRequest clientRequest) {
         Optional<String> requestId = Optional.fromNullable(MDC.get(configuration.getMdcKey()));
 
-        clientRequest.getHeaders().add(configuration.getHeaderName(), requestId.or(getSupplier()));
+        clientRequest.getHeaders().add(configuration.getHeaderName(), requestId.or(this.supplier));
 
         return clientRequest;
     }
-
-	private Supplier<String> getSupplier() {
-		return this.configuration.getSupplierFactory().build();
-	}
 }
