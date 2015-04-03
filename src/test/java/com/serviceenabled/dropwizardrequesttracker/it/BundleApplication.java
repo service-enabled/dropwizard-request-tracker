@@ -1,4 +1,4 @@
-package com.serviceenabled.dropwizardrequesttracker.com.serviceenabled.dropwizardrequesttracker.it;
+package com.serviceenabled.dropwizardrequesttracker.it;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;

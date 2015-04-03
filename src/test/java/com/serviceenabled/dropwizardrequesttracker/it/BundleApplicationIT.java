@@ -1,4 +1,4 @@
-package com.serviceenabled.dropwizardrequesttracker.com.serviceenabled.dropwizardrequesttracker.it;
+package com.serviceenabled.dropwizardrequesttracker.it;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

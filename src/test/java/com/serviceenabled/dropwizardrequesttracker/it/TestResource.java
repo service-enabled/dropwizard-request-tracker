@@ -1,4 +1,4 @@
-package com.serviceenabled.dropwizardrequesttracker.com.serviceenabled.dropwizardrequesttracker.it;
+package com.serviceenabled.dropwizardrequesttracker.it;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
