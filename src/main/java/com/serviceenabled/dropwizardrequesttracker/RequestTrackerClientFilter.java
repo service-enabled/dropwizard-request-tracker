@@ -12,12 +12,16 @@ import com.sun.jersey.api.client.filter.ClientFilter;
 
 public class RequestTrackerClientFilter extends ClientFilter {
     private final RequestTrackerConfiguration configuration;
+    private final Supplier<String> idSupplier;
 
     public RequestTrackerClientFilter(RequestTrackerConfiguration configuration) {
-        this.configuration = configuration;
+        this(configuration, new UuidSupplier());
     }
 
-    private static final Supplier<String> ID_SUPPLIER = new UuidSupplier();
+    public RequestTrackerClientFilter(RequestTrackerConfiguration configuration, Supplier<String> idSupplier) {
+        this.configuration = configuration;
+        this.idSupplier = idSupplier;
+    }
 
     @Override
     public ClientResponse handle(ClientRequest clientRequest) throws ClientHandlerException {
@@ -30,7 +34,7 @@ public class RequestTrackerClientFilter extends ClientFilter {
     protected ClientRequest doWork(ClientRequest clientRequest) {
         Optional<String> requestId = Optional.fromNullable(MDC.get(configuration.getMdcKey()));
 
-        clientRequest.getHeaders().add(configuration.getHeaderName(), requestId.or(ID_SUPPLIER));
+        clientRequest.getHeaders().add(configuration.getHeaderName(), requestId.or(idSupplier));
 
         return clientRequest;
     }
