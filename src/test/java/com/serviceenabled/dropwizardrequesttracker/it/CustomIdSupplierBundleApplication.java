@@ -1,16 +1,15 @@
-package com.serviceenabled.dropwizardrequesttracker.com.serviceenabled.dropwizardrequesttracker.it;
+package com.serviceenabled.dropwizardrequesttracker.it;
 
+import com.serviceenabled.dropwizardrequesttracker.RequestTrackerBundle;
+import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConfiguration;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-import com.serviceenabled.dropwizardrequesttracker.RequestTrackerBundle;
-import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConfiguration;
 
+public class CustomIdSupplierBundleApplication extends Application<BundleConfiguration> {
 
-public class BundleApplication extends Application<BundleConfiguration> {
-
-	private final RequestTrackerBundle<BundleConfiguration> tracker = new RequestTrackerBundle<BundleConfiguration>() {
+	private final RequestTrackerBundle<BundleConfiguration> tracker = new RequestTrackerBundle<BundleConfiguration>(new CustomIdSupplier()) {
 		@Override
 		public RequestTrackerConfiguration getRequestTrackerConfiguration(BundleConfiguration configuration) {
 			return configuration.getRequestTrackerConfiguration();

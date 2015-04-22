@@ -70,6 +70,19 @@ Defaults
 
 The `RequestTrackerConfiguration` sets the HTTP header name to `X-Request-Tracker` and the MDC key to `Request-Tracker` by default.  These can be overridden in your YAML configuration.
 
+By default `UuidSupplier` is used by the bundle and filters.  The provided bundle and filters provide constructors for you to pass in your own custom ID supplier.  Your custom ID supplier must implement Guava's `Supplier<String>`.  Here's an example ID supplier:
+
+```java
+import com.google.common.base.Supplier;
+
+public class CustomIdSupplier implements Supplier<String> {
+	@Override
+	public String get() {
+		return "12345";
+	}
+}
+```
+
 
 License
 -------
