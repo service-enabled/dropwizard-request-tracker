@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.MDC;
 
@@ -34,9 +35,17 @@ public class RequestTrackerServletFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+		HttpServletRequest httpServletRequest  = (HttpServletRequest) request;
+		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 		Optional<String> requestId = Optional.fromNullable(httpServletRequest.getHeader(configuration.getHeaderName()));
-		MDC.put(configuration.getMdcKey(), requestId.or(idSupplier));
+		String resolvedId = requestId.or(idSupplier);
+
+		MDC.put(configuration.getMdcKey(), resolvedId);
+
+		if( configuration.getAddResponseHeader() ) {
+			httpServletResponse.addHeader( configuration.getHeaderName(), resolvedId );
+		}
+
 		chain.doFilter(request, response);
 	}
 

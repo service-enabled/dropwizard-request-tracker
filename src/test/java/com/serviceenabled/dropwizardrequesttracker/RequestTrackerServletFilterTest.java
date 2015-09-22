@@ -2,6 +2,7 @@ package com.serviceenabled.dropwizardrequesttracker;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.isNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -10,12 +11,14 @@ import java.util.UUID;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.MDC;
 
@@ -25,7 +28,7 @@ public class RequestTrackerServletFilterTest {
 	private RequestTrackerConfiguration configuration;
 
 	@Mock private HttpServletRequest request;
-	@Mock private ServletResponse response;
+	@Mock private HttpServletResponse response;
 	@Mock private FilterChain chain;
 
 	@Before
@@ -72,4 +75,14 @@ public class RequestTrackerServletFilterTest {
 		assertThat(idInLog, equalTo(headerId));
 	}
 
+	@Test
+	public void addsResponseHeaderWhenConfigured() throws Exception {
+		this.configuration.setAddResponseHeader(true);
+
+		//Re-injecting the configuration to ensure the updated configuration is applied.
+		requestTrackerServletFilter = new RequestTrackerServletFilter(this.configuration);
+		requestTrackerServletFilter.doFilter(request, response, chain);
+
+		verify(response).addHeader( configuration.getHeaderName(), MDC.get(configuration.getMdcKey()));
+	}
 }
