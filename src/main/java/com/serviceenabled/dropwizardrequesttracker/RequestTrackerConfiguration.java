@@ -17,7 +17,7 @@ public class RequestTrackerConfiguration {
 		return this.addResponseHeader;
 	}
 
-	public void setAddResponseHeader( Boolean val ) {
+	public void setAddResponseHeader(Boolean val) {
 		this.addResponseHeader = val;
 	}
 
