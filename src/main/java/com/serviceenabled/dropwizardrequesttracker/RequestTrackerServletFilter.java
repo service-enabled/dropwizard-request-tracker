@@ -43,7 +43,7 @@ public class RequestTrackerServletFilter implements Filter {
 		MDC.put(configuration.getMdcKey(), resolvedId);
 
 		if(configuration.getAddResponseHeader()) {
-			httpServletResponse.addHeader( configuration.getHeaderName(), resolvedId );
+			httpServletResponse.addHeader(configuration.getHeaderName(), resolvedId);
 		}
 
 		chain.doFilter(request, response);
