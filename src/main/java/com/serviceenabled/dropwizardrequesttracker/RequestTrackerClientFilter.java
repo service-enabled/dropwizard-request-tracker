@@ -13,10 +13,6 @@ public class RequestTrackerClientFilter implements ClientRequestFilter {
     private final RequestTrackerConfiguration configuration;
     private final Supplier<String> idSupplier;
 
-    public RequestTrackerClientFilter() {
-        this(null, new UuidSupplier());
-    }
-
     public RequestTrackerClientFilter(RequestTrackerConfiguration configuration) {
         this(configuration, new UuidSupplier());
     }
