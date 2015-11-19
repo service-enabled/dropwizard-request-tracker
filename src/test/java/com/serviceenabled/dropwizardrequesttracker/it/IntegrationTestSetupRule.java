@@ -2,13 +2,14 @@ package com.serviceenabled.dropwizardrequesttracker.it;
 
 import com.serviceenabled.dropwizardrequesttracker.RequestTrackerClientFilter;
 import com.serviceenabled.dropwizardrequesttracker.RequestTrackerConfiguration;
-import com.sun.jersey.api.client.Client;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import java.net.URI;
 
 /**
@@ -16,14 +17,29 @@ import java.net.URI;
  */
 public class IntegrationTestSetupRule implements TestRule {
 	private final DropwizardAppRule<BundleConfiguration> dropwizardAppRule;
-	private final Client client = new Client();
+	private final Client client = ClientBuilder.newClient();
 	private ClientTestResource clientTestResource;
 	private MockTestResource mockTestResource;
 	private URI initialUri;
 	private RequestTrackerConfiguration configuration;
 
-	public IntegrationTestSetupRule(DropwizardAppRule<BundleConfiguration> dropwizardAppRule) {
+	public IntegrationTestSetupRule(final DropwizardAppRule<BundleConfiguration> dropwizardAppRule) {
 		this.dropwizardAppRule = dropwizardAppRule;
+
+		dropwizardAppRule.addListener(new DropwizardAppRule.ServiceListener<BundleConfiguration>() {
+			@Override
+			public void onRun(BundleConfiguration config, Environment environment, DropwizardAppRule<BundleConfiguration> rule) throws Exception {
+				clientTestResource = new ClientTestResource();
+				mockTestResource = new MockTestResource();
+				environment.jersey().register(mockTestResource);
+				environment.jersey().register(clientTestResource);
+			}
+
+			@Override
+			public void onStop(DropwizardAppRule<BundleConfiguration> rule) throws Exception {
+				super.onStop(rule);
+			}
+		});
 	}
 
 	@Override
@@ -32,17 +48,12 @@ public class IntegrationTestSetupRule implements TestRule {
 			@Override
 			public void evaluate() throws Throwable {
 				configuration = dropwizardAppRule.getConfiguration().getRequestTrackerConfiguration();
-				client.addFilter(new RequestTrackerClientFilter(configuration));
+				client.register(new RequestTrackerClientFilter(configuration));
 
 				initialUri = new URI("HTTP", null, "localhost", dropwizardAppRule.getLocalPort(), "/client-test", null, null);
 				URI secondaryURI = new URI("HTTP", null, "localhost", dropwizardAppRule.getLocalPort(), "/mock-test", null, null);
-				clientTestResource = new ClientTestResource(secondaryURI, client);
-				mockTestResource = new MockTestResource();
-
-				dropwizardAppRule.getEnvironment().getApplicationContext().stop();
-				dropwizardAppRule.getEnvironment().jersey().register(mockTestResource);
-				dropwizardAppRule.getEnvironment().jersey().register(clientTestResource);
-				dropwizardAppRule.getEnvironment().getApplicationContext().start();
+				clientTestResource.setClient(client);
+				clientTestResource.setUri(secondaryURI);
 
 				base.evaluate();
 			}

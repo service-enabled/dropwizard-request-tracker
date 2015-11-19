@@ -10,14 +10,16 @@ import java.util.UUID;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
 import org.junit.rules.RuleChain;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.ClientResponseContext;
+import javax.ws.rs.client.Entity;
 
 
 public class BundleApplicationIT {
-	private static final DropwizardAppRule<BundleConfiguration> DROPWIZARD_APP_RULE = new DropwizardAppRule<BundleConfiguration>(BundleApplication.class, null);
+	private static final DropwizardAppRule<BundleConfiguration> DROPWIZARD_APP_RULE = new DropwizardAppRule<BundleConfiguration>(BundleApplication.class);
 	private static final IntegrationTestSetupRule INTEGRATION_TEST_SETUP_RULE = new IntegrationTestSetupRule(DROPWIZARD_APP_RULE);
 
 	@ClassRule
@@ -35,19 +37,21 @@ public class BundleApplicationIT {
 	@Test
 	public void addsTrackerToOutgoingRequest() throws Exception {
 		Client client = INTEGRATION_TEST_SETUP_RULE.getClient();
-		client.resource(INTEGRATION_TEST_SETUP_RULE.getInitialUri())
-				.post(ClientResponse.class);
+		client.target(INTEGRATION_TEST_SETUP_RULE.getInitialUri())
+				.request()
+				.post(Entity.json(null), ClientResponseContext.class);
 
 		assertThat(INTEGRATION_TEST_SETUP_RULE.getMockTestResource().getRequestTrackerId(), notNullValue());
 	}
 
 	@Test
 	public void keepsTheId() throws Exception {
-		Client client = new Client();
+		Client client = ClientBuilder.newClient();
 		UUID id = UUID.randomUUID();
-		client.resource(INTEGRATION_TEST_SETUP_RULE.getInitialUri())
+		client.target(INTEGRATION_TEST_SETUP_RULE.getInitialUri())
+				.request()
 				.header(INTEGRATION_TEST_SETUP_RULE.getConfiguration().getHeaderName(), id)
-				.post(ClientResponse.class);
+				.post(Entity.json(null),ClientResponseContext.class);
 
 		assertThat(INTEGRATION_TEST_SETUP_RULE.getMockTestResource().getRequestTrackerId(), equalTo(id.toString()));
 	}
