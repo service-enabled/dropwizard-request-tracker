@@ -12,6 +12,13 @@ This project uses servlet filters, Jersey client filters, and [Logback's MDC](ht
 
 There's a Dropwizard bundle that will add in the servlet filter for you. Jersey client filters have to be manually added to your client classes.
 
+Compatibility
+-------------
+
+| Version       | Dropwizard Version             |
+| ------------- |:------------------------------:|
+| 2.0.x         | 1.2.x, 1.1.x, 1.0.x, 0.9.x     |
+| 0.2.x         | 0.8.x, 0.7.x                   |
 
 Integrating with existing dropwizard project
 --------------------------------------------
