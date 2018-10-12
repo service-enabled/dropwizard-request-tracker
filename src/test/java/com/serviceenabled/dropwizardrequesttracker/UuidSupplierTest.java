@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 public class UuidSupplierTest {
 	@Test
-	public void suppliesAnId() throws Exception {
+	public void suppliesAnId() {
 		UuidSupplier uuidSupplier = new UuidSupplier();
 		String id = uuidSupplier.get();
 

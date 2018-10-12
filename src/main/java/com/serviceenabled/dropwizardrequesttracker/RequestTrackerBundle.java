@@ -1,12 +1,10 @@
 package com.serviceenabled.dropwizardrequesttracker;
 
-import com.google.common.base.Supplier;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-
 import java.util.EnumSet;
-
+import java.util.function.Supplier;
 import javax.servlet.DispatcherType;
 
 public abstract class RequestTrackerBundle<T> implements ConfiguredBundle<T> {

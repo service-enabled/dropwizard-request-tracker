@@ -1,6 +1,6 @@
 package com.serviceenabled.dropwizardrequesttracker;
 
-import com.google.common.base.Supplier;
+import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

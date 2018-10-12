@@ -1,12 +1,10 @@
 package com.serviceenabled.dropwizardrequesttracker;
 
-import org.slf4j.MDC;
-
-import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
-
+import java.util.Optional;
+import java.util.function.Supplier;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
+import org.slf4j.MDC;
 
 
 public class RequestTrackerClientFilter implements ClientRequestFilter {
@@ -24,8 +22,9 @@ public class RequestTrackerClientFilter implements ClientRequestFilter {
 
     @Override
     public void filter(ClientRequestContext clientRequest) {
-        Optional<String> requestId = Optional.fromNullable(MDC.get(configuration.getMdcKey()));
+        Optional<String> requestId = Optional.ofNullable(MDC.get(configuration.getMdcKey()));
 
-        clientRequest.getHeaders().add(configuration.getHeaderName(), requestId.or(idSupplier));
+        clientRequest.getHeaders().add(configuration.getHeaderName(),
+            requestId.orElseGet(idSupplier));
     }
 }
