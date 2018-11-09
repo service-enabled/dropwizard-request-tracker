@@ -15,10 +15,11 @@ There's a Dropwizard bundle that will add in the servlet filter for you. Jersey 
 Compatibility
 -------------
 
-| Version       | Dropwizard Version             |
-| ------------- |:------------------------------:|
-| 2.0.x         | 1.2.x, 1.1.x, 1.0.x, 0.9.x     |
-| 0.2.x         | 0.8.x, 0.7.x                   |
+| Version       | Dropwizard Version                   | Java Version  |
+| ------------- |:-------------------------------------|--------------:|
+| 3.0.x         | 1.3.x,                               | 8+            |
+| 2.0.x         | 1.3.x, 1.2.x, 1.1.x, 1.0.x, 0.9.x    | 7+            |
+| 0.2.x         | 0.8.x, 0.7.x                         | 7+            |
 
 Integrating with existing dropwizard project
 --------------------------------------------
@@ -29,7 +30,7 @@ Add the following dependency into your pom.xml
 <dependency>
     <groupId>com.serviceenabled</groupId>
     <artifactId>dropwizard-request-tracker</artifactId>
-    <version>0.2.0</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
