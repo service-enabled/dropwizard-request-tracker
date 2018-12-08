@@ -1,6 +1,6 @@
 package com.serviceenabled.dropwizardrequesttracker.it;
 
-import com.google.common.base.Supplier;
+import java.util.function.Supplier;
 
 public class CustomIdSupplier implements Supplier<String> {
 	@Override
