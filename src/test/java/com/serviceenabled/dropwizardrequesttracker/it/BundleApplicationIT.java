@@ -19,7 +19,7 @@ import javax.ws.rs.client.Entity;
 
 
 public class BundleApplicationIT {
-	private static final DropwizardAppRule<BundleConfiguration> DROPWIZARD_APP_RULE = new DropwizardAppRule<BundleConfiguration>(BundleApplication.class);
+	private static final DropwizardAppRule<BundleConfiguration> DROPWIZARD_APP_RULE = new DropwizardAppRule<>(BundleApplication.class);
 	private static final IntegrationTestSetupRule INTEGRATION_TEST_SETUP_RULE = new IntegrationTestSetupRule(DROPWIZARD_APP_RULE);
 
 	@ClassRule
