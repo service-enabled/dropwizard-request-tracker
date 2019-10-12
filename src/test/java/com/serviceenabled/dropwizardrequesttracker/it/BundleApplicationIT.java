@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.rules.RuleChain;
 
 import javax.ws.rs.client.Client;
@@ -19,7 +19,7 @@ import javax.ws.rs.client.Entity;
 
 
 public class BundleApplicationIT {
-	private static final DropwizardAppRule<BundleConfiguration> DROPWIZARD_APP_RULE = new DropwizardAppRule<BundleConfiguration>(BundleApplication.class);
+	private static final DropwizardAppRule<BundleConfiguration> DROPWIZARD_APP_RULE = new DropwizardAppRule<>(BundleApplication.class);
 	private static final IntegrationTestSetupRule INTEGRATION_TEST_SETUP_RULE = new IntegrationTestSetupRule(DROPWIZARD_APP_RULE);
 
 	@ClassRule
@@ -35,7 +35,7 @@ public class BundleApplicationIT {
 	}
 
 	@Test
-	public void addsTrackerToOutgoingRequest() throws Exception {
+	public void addsTrackerToOutgoingRequest() {
 		Client client = INTEGRATION_TEST_SETUP_RULE.getClient();
 		client.target(INTEGRATION_TEST_SETUP_RULE.getInitialUri())
 				.request()
@@ -45,7 +45,7 @@ public class BundleApplicationIT {
 	}
 
 	@Test
-	public void keepsTheId() throws Exception {
+	public void keepsTheId() {
 		Client client = ClientBuilder.newClient();
 		UUID id = UUID.randomUUID();
 		client.target(INTEGRATION_TEST_SETUP_RULE.getInitialUri())

@@ -1,6 +1,6 @@
 package com.serviceenabled.dropwizardrequesttracker;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;

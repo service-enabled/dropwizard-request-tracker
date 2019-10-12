@@ -2,27 +2,24 @@ package com.serviceenabled.dropwizardrequesttracker;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.isNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.UUID;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RequestTrackerServletFilterTest {
 	private RequestTrackerServletFilter requestTrackerServletFilter;
 	private RequestTrackerConfiguration configuration;
@@ -31,14 +28,14 @@ public class RequestTrackerServletFilterTest {
 	@Mock private HttpServletResponse response;
 	@Mock private FilterChain chain;
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeEach
+	public void setUp() {
 		this.configuration = new RequestTrackerConfiguration();
 		requestTrackerServletFilter = new RequestTrackerServletFilter(this.configuration);
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@AfterEach
+	public void tearDown() {
 		MDC.clear();
 	}
 

@@ -2,7 +2,7 @@ package com.serviceenabled.dropwizardrequesttracker.it;
 
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.rules.RuleChain;
 
 import javax.ws.rs.client.Client;
@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 
 public class CustomIdSupplierBundleApplicationIT {
-	private static final DropwizardAppRule<BundleConfiguration> DROPWIZARD_APP_RULE = new DropwizardAppRule<BundleConfiguration>(CustomIdSupplierBundleApplication.class);
+	private static final DropwizardAppRule<BundleConfiguration> DROPWIZARD_APP_RULE = new DropwizardAppRule<>(CustomIdSupplierBundleApplication.class);
 	private static final IntegrationTestSetupRule INTEGRATION_TEST_SETUP_RULE = new IntegrationTestSetupRule(DROPWIZARD_APP_RULE);
 
 	@ClassRule
@@ -24,7 +24,7 @@ public class CustomIdSupplierBundleApplicationIT {
 			.around(INTEGRATION_TEST_SETUP_RULE);
 
 	@Test
-	public void suppliesCustomId() throws Exception {
+	public void suppliesCustomId() {
 		Client client = ClientBuilder.newClient();
 		client.target(INTEGRATION_TEST_SETUP_RULE.getInitialUri()).request().post(Entity.json(null), ClientResponseContext.class);
 
