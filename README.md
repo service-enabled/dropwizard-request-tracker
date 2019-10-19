@@ -81,7 +81,7 @@ The `RequestTrackerConfiguration` sets the HTTP header name to `X-Request-Tracke
 By default `UuidSupplier` is used by the bundle and filters.  The provided bundle and filters provide constructors for you to pass in your own custom ID supplier.  Your custom ID supplier must implement Guava's `Supplier<String>`.  Here's an example ID supplier:
 
 ```java
-import com.google.common.base.Supplier;
+import java.util.function.Supplier;
 
 public class CustomIdSupplier implements Supplier<String> {
 	@Override
